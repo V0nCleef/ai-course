@@ -79,7 +79,7 @@
     .slide-center ul { display: inline-block; text-align: left; }
 
     /* FULL-BLEED BACKGROUND slides */
-    .bg-slide { padding: 0 !important; }
+    .bg-slide { padding: 0 !important; position: relative; }
     .bg-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(135deg, rgba(15,15,30,0.90) 0%, rgba(26,26,46,0.52) 50%, rgba(15,15,30,0.88) 100%);
@@ -287,7 +287,7 @@
     <div class="slides">
 
       <!-- ═══════════════════════════ S1 — TITEL ═══════════════════════════ -->
-      <section class="bg-slide" data-background-image="assets/hero_bg.png" data-background-size="cover" data-background-position="center">
+      <section class="bg-slide" style="position:relative;" data-background-image="assets/hero_bg.png" data-background-size="cover" data-background-position="center">
         <div class="bg-overlay">
           <h1 class="grad-text">Kunstmatige Intelligentie</h1>
           <p class="hero-tagline">De Beginnersgids voor Iedereen</p>
@@ -448,12 +448,14 @@
 
       <!-- ═══════════════════════════ S8 — AI IN PRAKTIJK ═══════════════════════════ -->
       <section>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;">
         <h2>AI in het Dagelijks Leven</h2>
         <div class="card-row">
           <div class="card fragment"><span class="card-emoji">💻</span><h3>Computerprobleem?</h3><p>"Mijn printer doet raar" — AI helpt stap voor stap</p></div>
           <div class="card fragment"><span class="card-emoji">🍳</span><h3>Restjes Over?</h3><p>"Ik heb kip, paprika, rijst" — AI bedenkt een recept</p></div>
           <div class="card fragment"><span class="card-emoji">📝</span><h3>Brief Schrijven</h3><p>Naar gemeente of verzekering — AI formuleert netjes</p></div>
           <div class="card fragment"><span class="card-emoji">✈️</span><h3>Vakantie Plannen</h3><p>"Weekend weg, max €200, met hond" — AI zoekt opties</p></div>
+        </div>
         </div>
         <aside class="notes">
           Echte voorbeelden die iedereen herkent. AI kan nú al helpen met printers, recepten, brieven en vakanties.
@@ -528,6 +530,7 @@
 
       <!-- ═══════════════════════════ S12 — HOE PRAAT JE MET AI ═══════════════════════════ -->
       <section>
+        <div style="display:flex;flex-direction:column;align-items:stretch;justify-content:center;width:100%;height:100%;">
         <h2>Hoe Praat Je Met AI?</h2>
         <p class="kicker">Behandel AI als een <strong>enthousiaste stagiair</strong>: wees duidelijk!</p>
         <div class="side-layout" style="align-items:flex-start;">
@@ -548,6 +551,7 @@
               <li class="fragment" style="font-size:0.56em;">Vraag door — "maak korter," "nu in het Engels"</li>
             </ul>
           </div>
+        </div>
         </div>
         <aside class="notes">
           Een prompt = wat je tegen AI zegt. Geheim: wees specifiek. "Vertel over geschiedenis" = troep.
