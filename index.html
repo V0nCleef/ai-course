@@ -37,6 +37,9 @@
 
     html, body { background: #0f0f1e; }
 
+    /* Twemoji: size inline with surrounding text */
+    img.emoji { height: 1em; width: 1em; margin: 0 0.05em 0 0.1em; vertical-align: -0.1em; }
+
     /* ================================================================
        CANVAS-WIDE LAYOUT GUARD
        Reveal scales the .slides container (1280x720) to fit the
@@ -748,6 +751,7 @@
   <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/zoom/zoom.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
   <script>
     Reveal.initialize({
       controls: true,
@@ -856,6 +860,13 @@
       showPlayer();
       Reveal.on('slidechanged', showPlayer);
       Reveal.on('ready', showPlayer);
+
+      // Twemoji: replace emoji with SVG for TV browser compatibility
+      if (typeof twemoji !== 'undefined') {
+        function parseEmoji() { twemoji.parse(document.body, { folder: 'svg', ext: '.svg' }); }
+        Reveal.on('ready', parseEmoji);
+        Reveal.on('slidechanged', parseEmoji);
+      }
     })();
   </script>
 </body>
