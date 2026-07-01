@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI voor Beginners — Afbeeldingen Galerij</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    background: #0a0e1a;
+    color: #e8e6f0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+  }
+  
+  .header {
+    text-align: center;
+    padding: 40px 20px 20px;
+    background: linear-gradient(180deg, #111832 0%, #0a0e1a 100%);
+    border-bottom: 1px solid rgba(233, 69, 96, 0.2);
+  }
+  
+  .header h1 {
+    font-size: 2.2em;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e94560, #f0a050);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .header p {
+    color: #8890b0;
+    margin-top: 8px;
+    font-size: 1.05em;
+  }
+  
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 16px;
+    font-size: 0.9em;
+    color: #667090;
+  }
+  
+  .stats span { 
+    background: #141b30; 
+    padding: 6px 14px; 
+    border-radius: 20px;
+    border: 1px solid #1e2848;
+  }
+  
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 24px;
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .card {
+    background: #111832;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #1e2848;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(233, 69, 96, 0.15);
+    border-color: rgba(233, 69, 96, 0.4);
+  }
+  
+  .card-header {
+    padding: 14px 20px;
+    background: #0d1228;
+    border-bottom: 1px solid #1a2240;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .card-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e94560, #c03950);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85em;
+    color: #fff;
+  }
+  
+  .card-title {
+    font-weight: 600;
+    font-size: 1em;
+    color: #c8d0e8;
+  }
+  
+  .card-img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+    background: #0a0e1a;
+  }
+  
+  .card-desc {
+    padding: 12px 20px;
+    font-size: 0.85em;
+    color: #7880a0;
+    line-height: 1.5;
+  }
+  
+  .card-desc strong {
+    color: #e94560;
+  }
+  
+  .footer {
+    text-align: center;
+    padding: 30px;
+    color: #505878;
+    font-size: 0.85em;
+  }
+  
+  @media (max-width: 500px) {
+    .gallery { grid-template-columns: 1fr; padding: 16px; }
+    .header h1 { font-size: 1.5em; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎨 AI voor Beginners — Afbeeldingen Galerij</h1>
+  <p>9 AI-gegenereerde afbeeldingen voor de Nederlandse AI-cursus</p>
+  <div class="stats">
+    <span>🎯 SD 1.5</span>
+    <span>📐 1280×720</span>
+    <span>🎨 25 steps</span>
+    <span>⚡ ~3 min totaal</span>
+  </div>
+</div>
+
+<div class="gallery">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">1</div>
+      <div class="card-title">hero_bg.png</div>
+    </div>
+    <img class="card-img" src="assets/hero_bg.png" alt="Hero achtergrond — abstract AI neuraal netwerk" loading="lazy">
+    <div class="card-desc"><strong>Hero achtergrond</strong> — Abstract AI neuraal netwerk in nachtblauw/koraal/goud. Warm, uitnodigend, professioneel.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">2</div>
+      <div class="card-title">what_is_ai.png</div>
+    </div>
+    <img class="card-img" src="assets/what_is_ai.png" alt="Wat is AI — hond met trucje naast rekenmachine" loading="lazy">
+    <div class="card-desc"><strong>Wat is AI?</strong> — Hond die een trucje doet naast een rekenmachine. Cartoon-stijl, warm, educatief.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">3</div>
+      <div class="card-title">ai_vs_software.png</div>
+    </div>
+    <img class="card-img" src="assets/ai_vs_software.png" alt="AI vs Software — kookboek vs fotoalbum met katten" loading="lazy">
+    <div class="card-desc"><strong>AI vs Traditionele Software</strong> — Kookboek (regels) vs. fotoalbum met kattenfoto's (leren van voorbeelden).</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">4</div>
+      <div class="card-title">how_ai_learns.png</div>
+    </div>
+    <img class="card-img" src="assets/how_ai_learns.png" alt="Hoe AI leert — fietser in 3 stappen" loading="lazy">
+    <div class="card-desc"><strong>Hoe AI leert</strong> — 3-stappen flow: Voorbeelden → Patronen → Verbeteren. Fietser als metafoor.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">5</div>
+      <div class="card-title">gen_ai_showcase.png</div>
+    </div>
+    <img class="card-img" src="assets/gen_ai_showcase.png" alt="Gen AI showcase — collage van 3 AI-beelden" loading="lazy">
+    <div class="card-desc"><strong>Gen AI Showcase</strong> — Collage van 3 AI-gegenereerde beelden: landschap, portret, abstract.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">6</div>
+      <div class="card-title">ai_types.png</div>
+    </div>
+    <img class="card-img" src="assets/ai_types.png" alt="AI Types — Cloud, Lokaal, Harnassen" loading="lazy">
+    <div class="card-desc"><strong>Soorten AI</strong> — Drie kolommen: Cloud AI, Lokale AI, AI Harnassen. Simpel en overzichtelijk.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">7</div>
+      <div class="card-title">ai_everywhere.png</div>
+    </div>
+    <img class="card-img" src="assets/ai_everywhere.png" alt="AI Everywhere — wereldbol met sectoren" loading="lazy">
+    <div class="card-desc"><strong>AI Overal</strong> — Wereldbol met AI-toepassingen in film, muziek, zorg, transport, kunst.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">8</div>
+      <div class="card-title">try_it.png</div>
+    </div>
+    <img class="card-img" src="assets/try_it.png" alt="Probeer het — laptop met AI-assistent" loading="lazy">
+    <div class="card-desc"><strong>Probeer het zelf!</strong> — Laptop met vriendelijke AI-assistent. Uitnodigend, warm, laagdrempelig.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">9</div>
+      <div class="card-title">making_of.png</div>
+    </div>
+    <img class="card-img" src="assets/making_of.png" alt="Making of — proces van idee tot presentatie" loading="lazy">
+    <div class="card-desc"><strong>Making Of</strong> — Procesflow: Idee 💡 → Kunst 🎨 → Code 💻 → Presentatie 🖥️</div>
+  </div>
+</div>
+
+<div class="footer">
+  AI voor Beginners Cursus · Gegenereerd met Stable Diffusion 1.5 · 1280×720 · 16:9
+</div>
+
+</body>
+</html>
