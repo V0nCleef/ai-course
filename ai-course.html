@@ -79,15 +79,22 @@
     .slide-center ul { display: inline-block; text-align: left; }
 
     /* FULL-BLEED BACKGROUND slides */
-    .bg-slide { padding: 0 !important; }
+    /* Table-cell centering: works on EVERY browser including ancient TV WebKit */
+    .bg-slide {
+      padding: 0 !important;
+      display: table !important;
+      width: 1280px;
+      height: 720px;
+    }
     .bg-overlay {
-      width: 100%;
-      min-height: 100%;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+      width: 1280px;
+      height: 720px;
       box-sizing: border-box;
+      padding: 56px 84px;
       background: linear-gradient(135deg, rgba(15,15,30,0.90) 0%, rgba(26,26,46,0.52) 50%, rgba(15,15,30,0.88) 100%);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 56px 84px; text-align: center;
     }
     .bg-overlay > * { position: relative; z-index: 1; max-width: 100%; }
 
