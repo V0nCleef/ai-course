@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kunstmatige Intelligentie — Beginnersgids</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ================================================================
+       BRAND THEME
+       ================================================================ */
+    :root {
+      --r-background-color: #1a1a2e;
+      --r-main-color: #ffffff;
+      --r-heading-color: #e94560;
+      --r-link-color: #e94560;
+      --r-link-color-hover: #ff6b81;
+      --r-selection-background-color: rgba(233,69,96,0.27);
+      --r-main-font: 'Inter', system-ui, -apple-system, sans-serif;
+      --r-heading-font: 'Inter', system-ui, -apple-system, sans-serif;
+      --r-heading-text-transform: none;
+      --r-heading-font-weight: 700;
+      --r-heading-line-height: 1.1;
+      --accent: #e94560;
+      --accent-2: #ff6b81;
+      --accent-glow: rgba(233,69,96,0.45);
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.10);
+    }
+
+    html, body { background: #0f0f1e; }
+
+    /* ================================================================
+       CANVAS-WIDE LAYOUT GUARD
+       Reveal scales the .slides container (1280x720) to fit the
+       viewport. Inside, every section is a flex column that is
+       *centered* and *clamped* to the canvas so NOTHING overflows.
+       ================================================================ */
+    .reveal .slides {
+      text-align: left;
+    }
+    .reveal .slides section {
+      box-sizing: border-box;
+      height: 720px;              /* lock to canvas height */
+      width: 1280px;
+      padding: 56px 84px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;    /* vertical center => never spills top */
+      align-items: stretch;
+      overflow: hidden;           /* hard guard against any spill */
+    }
+
+    /* base body type — scaled relative to the locked canvas */
+    .reveal { font-size: 34px; }
+    .reveal h1 { font-size: 2.15em; font-weight: 900; color: var(--accent); margin: 0 0 0.3em; letter-spacing: -0.015em; line-height: 1.04; text-shadow: 0 0 36px var(--accent-glow); }
+    .reveal h2 { font-size: 1.55em; font-weight: 800; color: var(--accent); margin: 0 0 0.5em; letter-spacing: -0.015em; line-height: 1.08; }
+    .reveal h3 { font-size: 1.0em; font-weight: 700; margin: 0 0 0.2em; color: #fff; }
+    .reveal p  { line-height: 1.35; margin: 0 0 0.4em; }
+    .reveal li { margin-bottom: 0.28em; line-height: 1.32; }
+    .reveal strong { color: var(--accent-2); }
+
+    /* Arrow bullets */
+    .reveal ul { list-style: none; margin: 0; padding: 0; }
+    .reveal ul li { padding-left: 1.4em; position: relative; }
+    .reveal ul li::before { content: "▸"; color: var(--accent); font-weight: 800; position: absolute; left: 0; }
+
+    /* ================================================================
+       SLIDE VARIANTS
+       ================================================================ */
+    .slide-center { text-align: center; align-items: center; }
+    .slide-center ul { display: inline-block; text-align: left; }
+
+    /* FULL-BLEED BACKGROUND slides */
+    .bg-slide { padding: 0 !important; }
+    .bg-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(15,15,30,0.90) 0%, rgba(26,26,46,0.52) 50%, rgba(15,15,30,0.88) 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 56px 84px; text-align: center;
+    }
+    .bg-overlay > * { position: relative; z-index: 1; max-width: 100%; }
+
+    /* ================================================================
+       SIDE-BY-SIDE (image + text) — the workhorse layout
+       ================================================================ */
+    .side-layout {
+      display: flex; gap: 2.4rem; align-items: center;
+      flex: 1; min-height: 0; width: 100%;
+    }
+    .side-layout .side-text { flex: 1.05; min-width: 0; }
+    .side-layout .side-img  { flex: 0.95; display: flex; align-items: center; justify-content: center; min-height: 0; }
+    .side-layout .side-img img {
+      max-width: 100%; max-height: 460px; object-fit: contain;
+      border-radius: 16px;
+      box-shadow: 0 14px 50px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.07);
+    }
+
+    /* ================================================================
+       CARDS
+       ================================================================ */
+    .card-row {
+      display: flex; gap: 1.2rem; flex-wrap: nowrap;
+      justify-content: center; width: 100%;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 1.3rem 1rem;
+      text-align: center; flex: 1 1 0; min-width: 0;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      backdrop-filter: blur(6px);
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 12px 34px rgba(0,0,0,0.45); border-color: var(--accent); }
+    .card .card-emoji { font-size: 2.4em; display: block; margin-bottom: 0.3em; line-height: 1; }
+    .card h3 { color: var(--accent); font-size: 0.82em; margin-bottom: 0.25em; }
+    .card p  { font-size: 0.52em; opacity: 0.85; margin: 0; line-height: 1.32; }
+
+    /* ================================================================
+       STAT / BADGE ROW
+       ================================================================ */
+    .stat-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .stat-badge {
+      background: rgba(233,69,96,0.12);
+      border: 2px solid rgba(233,69,96,0.28);
+      border-radius: 16px; padding: 1rem 1.3rem;
+      text-align: center; min-width: 110px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .stat-badge:hover { transform: translateY(-4px); box-shadow: 0 8px 26px rgba(0,0,0,0.4); }
+    .stat-badge .emoji { font-size: 1.9em; display: block; line-height: 1; }
+    .stat-badge .label { font-size: 0.46em; opacity: 0.85; margin-top: 0.4em; display: block; }
+    .stat-badge .label small { opacity: 0.7; }
+
+    /* ================================================================
+       PROMPT BOXES
+       ================================================================ */
+    .prompt-box {
+      border-radius: 12px; padding: 0.85rem 1.15rem; margin: 0.45rem 0; font-size: 0.56em; line-height: 1.35;
+    }
+    .prompt-box.bad  { background: rgba(255,70,70,0.12);   border: 2px solid rgba(255,70,70,0.3); }
+    .prompt-box.good { background: rgba(70,210,110,0.12);  border: 2px solid rgba(70,210,110,0.3); }
+    .prompt-box .box-label { font-weight: 800; font-size: 0.8em; display: block; margin-bottom: 0.25em; }
+    .prompt-box.bad  .box-label { color: #ff6b6b; }
+    .prompt-box.good .box-label { color: #5fe08a; }
+    .prompt-box strong { color: inherit; }
+
+    /* ================================================================
+       HERO
+       ================================================================ */
+    .hero-tagline  { font-size: 1.25em; font-weight: 300; opacity: 0.92; margin-top: 0.1em; }
+    .hero-subtitle { font-size: 0.5em; opacity: 0.62; margin-top: 1.6rem; max-width: 70%; }
+    .scroll-hint {
+      position: absolute; bottom: 1.6rem; left: 50%; transform: translateX(-50%);
+      font-size: 0.42em; opacity: 0.5; animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-8px); }
+    }
+
+    /* soft kicker line under headings */
+    .kicker { font-size: 0.52em; opacity: 0.66; margin-bottom: 1rem; }
+
+    /* ================================================================
+       FLASHY ACCENTS
+       ================================================================ */
+    /* animated gradient bar accent on standard slides */
+    .reveal .slides section:not(.bg-slide)::before {
+      content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 8px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+    /* gentle floating glow blobs on plain slides */
+    .reveal .slides section:not(.bg-slide)::after {
+      content: ""; position: absolute; right: -120px; bottom: -120px;
+      width: 360px; height: 360px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(233,69,96,0.18), transparent 70%);
+      pointer-events: none; z-index: 0;
+      animation: floatGlow 9s ease-in-out infinite;
+    }
+    @keyframes floatGlow {
+      0%,100% { transform: translate(0,0) scale(1); opacity: 0.8; }
+      50% { transform: translate(-30px,-30px) scale(1.15); opacity: 1; }
+    }
+    .reveal .slides section > *:not(.bg-overlay) { position: relative; z-index: 1; }
+
+    /* fragment that grows in with a little pop */
+    .reveal .fragment.pop { transform: scale(0.85); }
+    .reveal .fragment.pop.visible { transform: scale(1); }
+
+    /* gradient text helper */
+    .grad-text {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
+
+    /* ================================================================
+       RESPONSIVE — Reveal scales the canvas, but we nudge type for
+       very small / very large viewports for legibility.
+       ================================================================ */
+    @media (max-width: 768px) {
+      .side-layout { flex-direction: column; gap: 1rem; }
+      .side-layout .side-img img { max-height: 230px; }
+      .card-row { flex-wrap: wrap; }
+      .card { min-width: 40%; }
+    }
+
+    /* ================================================================
+       REVEAL.JS OVERRIDES
+       ================================================================ */
+    .reveal .progress { background: rgba(233,69,96,0.22); height: 5px; }
+    .reveal .progress span { background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    .reveal .controls { color: var(--accent); }
+    .reveal .slide-number { background: rgba(233,69,96,0.7); font-size: 16px; }
+
+    /* fullscreen button */
+    #fsBtn {
+      position: fixed; top: 16px; right: 16px; z-index: 60;
+      background: rgba(233,69,96,0.85); color: #fff; border: none;
+      width: 46px; height: 46px; border-radius: 12px; cursor: pointer;
+      font-size: 20px; line-height: 46px; text-align: center;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4); transition: transform 0.2s, background 0.2s;
+    }
+    #fsBtn:hover { transform: scale(1.08); background: var(--accent-2); }
+  </style>
+</head>
+<body>
+  <button id="fsBtn" title="Volledig scherm (F)" aria-label="Volledig scherm">⛶</button>
+
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ═══════════════════════════ S1 — TITEL ═══════════════════════════ -->
+      <section class="bg-slide" data-background-image="assets/hero_bg.png" data-background-size="cover" data-background-position="center">
+        <div class="bg-overlay">
+          <h1 class="grad-text">Kunstmatige Intelligentie</h1>
+          <p class="hero-tagline">De Beginnersgids voor Iedereen</p>
+          <p class="fragment hero-subtitle">
+            Géén jargon. Géén technische kennis. Gewoon nieuwsgierigheid.
+          </p>
+          <p class="fragment scroll-hint">▼ swipe of pijltjes om verder te gaan ▼</p>
+        </div>
+        <aside class="notes">
+          Welkom! Deze cursus is voor álle leeftijden — van 15 tot 75. We ontdekken AI zonder
+          moeilijke woorden. Denk aan "een hond een trucje leren" in plaats van "machine learning."
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S2 — WAT IS AI ═══════════════════════════ -->
+      <section>
+        <h2>Wat is Kunstmatige Intelligentie?</h2>
+        <div class="side-layout">
+          <div class="side-text">
+            <p>AI leert van <strong>voorbeelden</strong>, niet van regels.</p>
+            <ul>
+              <li class="fragment">Een hond leer je met <strong>beloningen</strong>, niet met een handleiding</li>
+              <li class="fragment">Een rekenmachine <strong>volgt regels</strong> — AI <strong>herkent patronen</strong></li>
+              <li class="fragment">Hoe meer voorbeelden, hoe <strong>slimmer</strong> de AI wordt</li>
+            </ul>
+          </div>
+          <div class="side-img">
+            <img src="assets/what_is_ai.png" alt="AI leert als een hond — van voorbeelden">
+          </div>
+        </div>
+        <aside class="notes">
+          Stel je voor: je leert een hond zitten. Je geeft geen handleiding — je laat het zien,
+          beloont, herhaalt. AI werkt precies zo: duizenden voorbeelden zien, patronen ontdekken.
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S3 — AI vs SOFTWARE ═══════════════════════════ -->
+      <section>
+        <h2>AI versus Gewone Software</h2>
+        <div class="side-layout">
+          <div class="side-text">
+            <div class="prompt-box bad fragment">
+              <span class="box-label">✕ Gewone Software</span>
+              "Volg dit recept precies. Stap 1, stap 2, stap 3."
+            </div>
+            <div class="prompt-box good fragment">
+              <span class="box-label">✓ Kunstmatige Intelligentie</span>
+              "Kijk naar 10.000 kattenfoto's. Herken zelf wat een kat is."
+            </div>
+            <p class="fragment" style="margin-top:0.7rem; font-size:0.5em; opacity:0.7;">
+              Software = kookboek &nbsp;|&nbsp; AI = leren door te zien
+            </p>
+          </div>
+          <div class="side-img">
+            <img src="assets/ai_vs_software.png" alt="Recept versus leren door zien">
+          </div>
+        </div>
+        <aside class="notes">
+          Software is een kookboek — exact recept, blind volgen. AI is een leerling-kok die
+          naar duizenden gerechten kijkt en zelf leert. Geen regels — gewoon héél veel voorbeelden.
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S4 — HOE AI LEERT (Auto-Animate) ═══════════════════════════ -->
+      <section data-auto-animate>
+        <h2 data-id="learn-title">Hoe Leert AI? <span style="font-size:0.42em;opacity:0.5;font-weight:400;">— Stap 1</span></h2>
+        <div class="side-layout">
+          <div class="side-text">
+            <p data-id="learn-step" style="font-size:1.15em;color:var(--accent);font-weight:800;margin-bottom:0.3em;">🔍 Tonen</p>
+            <p>Je laat de AI <strong>duizenden voorbeelden</strong> zien.</p>
+            <p style="font-size:0.5em;opacity:0.62;">Net als: je laat een kind zien hoe je fietst.</p>
+          </div>
+          <div class="side-img">
+            <img src="assets/how_ai_learns.png" alt="Stap 1: tonen" data-id="learn-img">
+          </div>
+        </div>
+        <aside class="notes">Stap 1: AI ziet duizenden voorbeelden. Zoals jij als kind keek hoe anderen fietsen.</aside>
+      </section>
+      <section data-auto-animate>
+        <h2 data-id="learn-title">Hoe Leert AI? <span style="font-size:0.42em;opacity:0.5;font-weight:400;">— Stap 2</span></h2>
+        <div class="side-layout">
+          <div class="side-text">
+            <p data-id="learn-step" style="font-size:1.15em;color:var(--accent);font-weight:800;margin-bottom:0.3em;">🧠 Patronen Vinden</p>
+            <p>De AI ontdekt zelf <strong>wat bij elkaar hoort</strong>.</p>
+            <p style="font-size:0.5em;opacity:0.62;">Net als: je leert balans houden zonder handleiding.</p>
+          </div>
+          <div class="side-img">
+            <img src="assets/how_ai_learns.png" alt="Stap 2: patronen" data-id="learn-img">
+          </div>
+        </div>
+        <aside class="notes">Stap 2: AI vindt zelf patronen. Katten hebben puntige oren — dat ontdekt hij zelf.</aside>
+      </section>
+      <section data-auto-animate>
+        <h2 data-id="learn-title">Hoe Leert AI? <span style="font-size:0.42em;opacity:0.5;font-weight:400;">— Stap 3</span></h2>
+        <div class="side-layout">
+          <div class="side-text">
+            <p data-id="learn-step" style="font-size:1.15em;color:var(--accent);font-weight:800;margin-bottom:0.3em;">🔄 Verbeteren</p>
+            <p>Foutje? <strong>Bijsturen</strong> en opnieuw proberen.</p>
+            <p style="font-size:0.5em;opacity:0.62;">Net als: vallen, opstaan, weer doorgaan.</p>
+          </div>
+          <div class="side-img">
+            <img src="assets/how_ai_learns.png" alt="Stap 3: verbeteren" data-id="learn-img">
+          </div>
+        </div>
+        <aside class="notes">
+          Stap 3: vallen en opstaan. Na miljoenen pogingen wordt de AI razendsnel. Dit heet "training."
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S5 — JE GEBRUIKT NU AL AI ═══════════════════════════ -->
+      <section>
+        <h2>Je Gebruikt Nu Al AI!</h2>
+        <p class="kicker">Zonder dat je het doorhebt, elke dag:</p>
+        <div class="card-row">
+          <div class="card fragment"><span class="card-emoji">🎬</span><h3>Netflix</h3><p>"Omdat je keek naar…" — AI raadt wat jij leuk vindt</p></div>
+          <div class="card fragment"><span class="card-emoji">📱</span><h3>Face Unlock</h3><p>Jouw gezicht herkend tussen miljoenen anderen</p></div>
+          <div class="card fragment"><span class="card-emoji">🌍</span><h3>Translate</h3><p>Hele zinnen vertalen — niet woord-voor-woord</p></div>
+          <div class="card fragment"><span class="card-emoji">📧</span><h3>Spamfilter</h3><p>Nepmail herkennen vóór jij hem ziet</p></div>
+        </div>
+        <aside class="notes">
+          Je gebruikt al járen AI! Netflix, Face Unlock, Translate, spamfilters. Het is niet "de toekomst" — het is nu.
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S6 — GENERATIEVE AI ═══════════════════════════ -->
+      <section class="bg-slide" data-background-image="assets/gen_ai_showcase.png" data-background-size="cover" data-background-position="center">
+        <div class="bg-overlay">
+          <h2>Generatieve AI</h2>
+          <p class="fragment" style="font-size:0.9em;">ChatGPT schrijft. DALL-E tekent. Suno maakt muziek.</p>
+          <p class="fragment" style="font-size:0.6em;opacity:0.78;margin-top:1.2rem;max-width:80%;">
+            "Het mixt patronen die het eerder heeft gezien —<br>net als een chef die nieuwe gerechten bedenkt."
+          </p>
+          <p class="fragment" style="font-size:0.42em;opacity:0.55;margin-top:1.6rem;">
+            🖼️ Deze achtergrond is gemaakt door AI
+          </p>
+        </div>
+        <aside class="notes">
+          Generatieve AI maakt nieuwe dingen: tekst, beelden, muziek. ChatGPT = assistent die alles
+          heeft gelezen. DALL-E tekent wat jij beschrijft. Achtergrond = AI-gegenereerd!
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S7 — WAT AI KAN ═══════════════════════════ -->
+      <section>
+        <h2>Wat Kan AI Voor Jou Doen?</h2>
+        <p class="kicker">Zie AI als een <strong>behulpzame assistent</strong>:</p>
+        <div class="card-row">
+          <div class="card fragment"><span class="card-emoji">✍️</span><h3>Schrijven</h3><p>E-mails, brieven, verhalen</p></div>
+          <div class="card fragment"><span class="card-emoji">📋</span><h3>Samenvatten</h3><p>Lange teksten in 3 zinnen</p></div>
+          <div class="card fragment"><span class="card-emoji">🌐</span><h3>Vertalen</h3><p>50+ talen, mét context</p></div>
+          <div class="card fragment"><span class="card-emoji">💡</span><h3>Brainstormen</h3><p>Ideeën, namen, slogans</p></div>
+        </div>
+        <aside class="notes">
+          AI is géén bedreiging — een hulpmiddel. Als een rekenmachine, maar dan voor taal en creativiteit.
+          Een stagiair die nooit moe wordt en alles heeft gelezen.
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S8 — AI IN PRAKTIJK ═══════════════════════════ -->
+      <section>
+        <h2>AI in het Dagelijks Leven</h2>
+        <div class="card-row">
+          <div class="card fragment"><span class="card-emoji">💻</span><h3>Computerprobleem?</h3><p>"Mijn printer doet raar" — AI helpt stap voor stap</p></div>
+          <div class="card fragment"><span class="card-emoji">🍳</span><h3>Restjes Over?</h3><p>"Ik heb kip, paprika, rijst" — AI bedenkt een recept</p></div>
+          <div class="card fragment"><span class="card-emoji">📝</span><h3>Brief Schrijven</h3><p>Naar gemeente of verzekering — AI formuleert netjes</p></div>
+          <div class="card fragment"><span class="card-emoji">✈️</span><h3>Vakantie Plannen</h3><p>"Weekend weg, max €200, met hond" — AI zoekt opties</p></div>
+        </div>
+        <aside class="notes">
+          Echte voorbeelden die iedereen herkent. AI kan nú al helpen met printers, recepten, brieven en vakanties.
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S9 — SOORTEN AI ═══════════════════════════ -->
+      <section class="bg-slide" data-background-image="assets/ai_types.png" data-background-size="cover" data-background-position="center">
+        <div class="bg-overlay">
+          <h2>Drie Smaken AI</h2>
+          <div class="card-row" style="margin-top:1.2rem;max-width:92%;">
+            <div class="card fragment" style="background:rgba(20,20,40,0.72);">
+              <span class="card-emoji">☁️</span><h3>Cloud AI</h3><p>Via internet. ChatGPT, Google. Altijd up-to-date.</p>
+            </div>
+            <div class="card fragment" style="background:rgba(20,20,40,0.72);">
+              <span class="card-emoji">💻</span><h3>Lokale AI</h3><p>Op je eigen PC. 100% privé, geen internet nodig.</p>
+            </div>
+            <div class="card fragment" style="background:rgba(20,20,40,0.72);">
+              <span class="card-emoji">🤖</span><h3>AI-Agents</h3><p>Zelfstandige assistenten. Doen taken voor je.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          Drie soorten: Cloud (internet), Lokaal (eigen PC, privé), Agents (zelfstandige assistenten).
+          Deze presentatie gebruikt alle drie!
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S10 — AI OVERAL ═══════════════════════════ -->
+      <section class="bg-slide" data-background-image="assets/ai_everywhere.png" data-background-size="cover" data-background-position="center">
+        <div class="bg-overlay">
+          <h2>AI is Overal</h2>
+          <div class="stat-row" style="margin-top:1rem;">
+            <div class="stat-badge fragment" style="background:rgba(20,20,40,0.7);border-color:rgba(255,255,255,0.18);">
+              <span class="emoji">🎥</span><span class="label">Video &amp; Beeld</span>
+            </div>
+            <div class="stat-badge fragment" style="background:rgba(20,20,40,0.7);border-color:rgba(255,255,255,0.18);">
+              <span class="emoji">🎤</span><span class="label">Spraak</span>
+            </div>
+            <div class="stat-badge fragment" style="background:rgba(20,20,40,0.7);border-color:rgba(255,255,255,0.18);">
+              <span class="emoji">🏥</span><span class="label">Zorg</span>
+            </div>
+            <div class="stat-badge fragment" style="background:rgba(20,20,40,0.7);border-color:rgba(255,255,255,0.18);">
+              <span class="emoji">🚗</span><span class="label">Transport</span>
+            </div>
+            <div class="stat-badge fragment" style="background:rgba(20,20,40,0.7);border-color:rgba(255,255,255,0.18);">
+              <span class="emoji">🎨</span><span class="label">Kunst</span>
+            </div>
+          </div>
+          <p class="fragment grad-text" style="font-size:1.4em;font-weight:900;margin-top:1.6rem;">
+            AI is het NU.
+          </p>
+        </div>
+        <aside class="notes">
+          AI in video, spraak, zorg (kankerdetectie!), transport, kunst. Geen toekomstmuziek — dit gebeurt vandaag.
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S11 — WAT AI NIET KAN ═══════════════════════════ -->
+      <section>
+        <h2>Wat AI <span style="text-decoration:underline;text-decoration-color:var(--accent);">Niet</span> Kan</h2>
+        <div class="card-row">
+          <div class="card fragment"><span class="card-emoji">❤️</span><h3>Begrijpen</h3><p>AI voorspelt woorden — het begrijpt niet wat het zegt</p></div>
+          <div class="card fragment"><span class="card-emoji">😢</span><h3>Voelen</h3><p>Geen emoties. Geen bewustzijn. Het lijkt alleen maar zo.</p></div>
+          <div class="card fragment"><span class="card-emoji">⚠️</span><h3>Altijd de Waarheid</h3><p style="font-weight:700;color:var(--accent);">AI kan vol overtuiging fout zijn!</p></div>
+        </div>
+        <aside class="notes">
+          AI is niet magisch. Het voorspelt alleen woorden — begrijpt niets. Kan met 100% overtuiging onzin
+          vertellen ("hallucineren"). Altijd feiten controleren!
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S12 — HOE PRAAT JE MET AI ═══════════════════════════ -->
+      <section>
+        <h2>Hoe Praat Je Met AI?</h2>
+        <p class="kicker">Behandel AI als een <strong>enthousiaste stagiair</strong>: wees duidelijk!</p>
+        <div class="side-layout" style="align-items:flex-start;">
+          <div class="side-text" style="flex:1;">
+            <div class="prompt-box bad fragment">
+              <span class="box-label">❌ Slechte prompt</span>
+              "Vertel eens iets over geschiedenis."
+            </div>
+            <div class="prompt-box good fragment">
+              <span class="box-label">✅ Goede prompt</span>
+              "Leg in 3 simpele zinnen uit waarom de Berlijnse Muur viel. Alsof je het aan een 12-jarige uitlegt."
+            </div>
+          </div>
+          <div class="side-text" style="flex:1;">
+            <ul style="margin-top:0.2rem;">
+              <li class="fragment" style="font-size:0.56em;">Wees <strong>specifiek</strong> — hoe concreter, hoe beter</li>
+              <li class="fragment" style="font-size:0.56em;">Geef <strong>context</strong> — "voor mijn oma" vs "voor mijn baas"</li>
+              <li class="fragment" style="font-size:0.56em;">Vraag door — "maak korter," "nu in het Engels"</li>
+            </ul>
+          </div>
+        </div>
+        <aside class="notes">
+          Een prompt = wat je tegen AI zegt. Geheim: wees specifiek. "Vertel over geschiedenis" = troep.
+          "Leg de Muur uit in 3 zinnen aan een 12-jarige" = goud.
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S13 — VEILIG & SLIM ═══════════════════════════ -->
+      <section>
+        <h2>Veilig &amp; Slim met AI</h2>
+        <div class="card-row">
+          <div class="card fragment"><span class="card-emoji">🔒</span><h3>Geen Privé-info</h3><p>Deel nooit wachtwoorden, banknummers of medische gegevens</p></div>
+          <div class="card fragment"><span class="card-emoji">✅</span><h3>Controleer Feiten</h3><p>AI kan overtuigend fout zijn. Check belangrijke info altijd.</p></div>
+          <div class="card fragment"><span class="card-emoji">🙂</span><h3>Wees Vriendelijk</h3><p>Hoe beleefder jij bent, hoe behulpzamer het antwoord</p></div>
+        </div>
+        <aside class="notes">
+          Drie regels: 1) Geen privé-info — AI onthoudt. 2) Feiten checken — AI hallucineert.
+          3) Wees vriendelijk — AI spiegelt jouw toon. "Alsjeblieft" helpt echt!
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S14 — PROBEER HET ZELF ═══════════════════════════ -->
+      <section>
+        <h2>Probeer Het Zelf!</h2>
+        <div class="side-layout">
+          <div class="side-text">
+            <p style="font-size:0.6em;margin-bottom:0.7rem;">Ga naar <strong>chat.openai.com</strong> — gratis, direct aan de slag.</p>
+            <div class="prompt-box good fragment">
+              <span class="box-label">🎉 Prompt 1</span>
+              "Schrijf een grappig gedicht van 4 regels over mijn oma die beter kookt dan een sterrenchef."
+            </div>
+            <div class="prompt-box good fragment">
+              <span class="box-label">🌍 Prompt 2</span>
+              "Leg uit waarom de lucht blauw is. Gebruik alleen woorden die een 8-jarige begrijpt."
+            </div>
+            <div class="prompt-box good fragment">
+              <span class="box-label">🍝 Prompt 3</span>
+              "Ik heb pasta, tomatensaus, kaas en een ei. Wat kan ik koken? Geef 3 opties."
+            </div>
+          </div>
+          <div class="side-img">
+            <img src="assets/try_it.png" alt="Probeer ChatGPT zelf">
+          </div>
+        </div>
+        <aside class="notes">
+          Tijd voor actie! Deze prompts kun je letterlijk in ChatGPT plakken. Creatief, educatief, praktisch.
+          Laat iedereen er minstens één proberen!
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S15 — HOE WE DIT MAAKTEN ═══════════════════════════ -->
+      <section class="bg-slide" data-background-image="assets/making_of.png" data-background-size="cover" data-background-position="center">
+        <div class="bg-overlay">
+          <h2>Hoe We Dit Maakten</h2>
+          <p style="font-size:0.5em;opacity:0.72;">Deze hele presentatie is gemaakt door AI:</p>
+          <div class="stat-row" style="margin-top:1.1rem;">
+            <div class="stat-badge fragment" style="background:rgba(20,20,40,0.7);border-color:rgba(255,255,255,0.18);">
+              <span class="emoji">🎨</span><span class="label">AI Kunst<br><small>ComfyUI</small></span>
+            </div>
+            <div class="stat-badge fragment" style="background:rgba(20,20,40,0.7);border-color:rgba(255,255,255,0.18);">
+              <span class="emoji">💻</span><span class="label">AI Code<br><small>Hermes</small></span>
+            </div>
+            <div class="stat-badge fragment" style="background:rgba(20,20,40,0.7);border-color:rgba(255,255,255,0.18);">
+              <span class="emoji">✍️</span><span class="label">AI Tekst<br><small>Hermes</small></span>
+            </div>
+          </div>
+          <p class="fragment" style="margin-top:1.6rem;font-size:0.92em;font-weight:700;">
+            Idee → AI Kunst → AI Code → AI Tekst → <span class="grad-text">Presentatie!</span>
+          </p>
+          <p class="fragment" style="font-size:0.55em;opacity:0.55;margin-top:1rem;">📺 En nu op je TV!</p>
+        </div>
+        <aside class="notes">
+          Meta! Deze presentatie is door AI gemaakt. Afbeeldingen: ComfyUI + Flux Schnell. Code & tekst: Hermes.
+          Als AI dít kan — stel je voor wat jij ermee kunt!
+        </aside>
+      </section>
+
+      <!-- ═══════════════════════════ S16 — SAMENVATTING ═══════════════════════════ -->
+      <section class="slide-center">
+        <h2>Samenvatting</h2>
+        <ul style="font-size:0.56em;">
+          <li class="fragment">🤖 AI leert van voorbeelden — zoals een hond trucjes leren</li>
+          <li class="fragment">📱 Je gebruikt het nu al: Netflix, Face Unlock, vertalingen</li>
+          <li class="fragment">✍️ Generatieve AI schrijft, tekent en maakt muziek</li>
+          <li class="fragment">💡 Zie AI als een <strong>enthousiaste stagiair</strong> — wees duidelijk</li>
+          <li class="fragment">⚠️ AI kan fouten maken — controleer belangrijke feiten</li>
+          <li class="fragment">🆓 Probeer ChatGPT — het is gratis!</li>
+        </ul>
+        <div class="fragment" style="margin-top:1.1rem;">
+          <p style="font-size:0.5em;opacity:0.7;">Meer leren? chat.openai.com &bull; Vraag het aan AI!</p>
+        </div>
+        <h1 class="fragment grad-text" style="font-size:1.5em;margin-top:0.8rem;">Bedankt!</h1>
+        <p class="fragment" style="font-size:0.6em;opacity:0.7;">Vragen? Steek je hand op! 🙋</p>
+        <aside class="notes">
+          Recap: AI = patroonherkenner, geen magie. Je gebruikt het al. ChatGPT is gratis.
+          Belangrijkste tip: wees specifiek, controleer feiten. Bedankt! Tijd voor vragen.
+        </aside>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js 5.x -->
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/zoom/zoom.js"></script>
+  <script>
+    Reveal.initialize({
+      controls: true,
+      controlsLayout: 'bottom-right',
+      controlsBackArrows: 'visible',
+      progress: true,
+      slideNumber: 'c/t',
+      hash: true,
+      keyboard: true,
+      overview: true,
+      touch: true,
+      loop: false,
+      fragments: true,
+      help: true,
+
+      // Transitions
+      transition: 'slide',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      viewDistance: 3,
+
+      // Fixed 1280×720 canvas, CENTERED so content never spills off the top.
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      minScale: 0.2,
+      maxScale: 2.0,
+      center: true,
+
+      // Auto-Animate
+      autoAnimateEasing: 'ease-out',
+      autoAnimateDuration: 0.7,
+      autoAnimateUnmatched: true,
+
+      plugins: [RevealNotes, RevealZoom],
+    });
+
+    // Fullscreen button — works on desktop, mobile and most Smart TV browsers
+    document.getElementById('fsBtn').addEventListener('click', function () {
+      var el = document.documentElement;
+      if (!document.fullscreenElement) {
+        (el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen).call(el);
+      } else {
+        (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      }
+    });
+  </script>
+</body>
+</html>
+<!-- deployed 2026-06-30T18:10:02Z -->

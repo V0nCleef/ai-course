@@ -81,8 +81,7 @@
     /* FULL-BLEED BACKGROUND slides */
     .bg-slide { padding: 0 !important; position: relative; }
     .bg-overlay {
-      position: absolute;
-      top: 0; right: 0; bottom: 0; left: 0;
+      position: absolute; inset: 0;
       background: linear-gradient(135deg, rgba(15,15,30,0.90) 0%, rgba(26,26,46,0.52) 50%, rgba(15,15,30,0.88) 100%);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
@@ -357,7 +356,7 @@
     <div class="slides">
 
       <!-- ═══════════════════════════ S1 — TITEL ═══════════════════════════ -->
-      <section class="bg-slide" data-background-image="assets/hero_bg.png" data-background-size="cover" data-background-position="center">
+      <section class="bg-slide" style="position:relative;" data-background-image="assets/hero_bg.png" data-background-size="cover" data-background-position="center">
         <div class="bg-overlay">
           <h1 class="grad-text">Kunstmatige Intelligentie</h1>
           <p class="hero-tagline">De Beginnersgids voor Iedereen</p>
