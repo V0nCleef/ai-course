@@ -346,7 +346,7 @@
   <audio id="bg-song" preload="auto" autoplay loop>
     <source src="https://cdn1.suno.ai/32f788f3-9453-43f5-951e-e22484d9c5ff.m4a" type="audio/mp4">
   </audio>
-  <div id="bg-player-wrap" style="display:none;position:fixed;bottom:16px;left:50%25;transform:translateX(-50%25);z-index:100;background:rgba(20,20,40,0.92);border:1px solid rgba(233,69,96,0.4);border-radius:14px;padding:8px 18px;box-shadow:0 8px 32px rgba(0,0,0,0.6);font-family:Inter,sans-serif;">
+  <div id="bg-player-wrap" style="display:block;position:fixed;bottom:16px;left:50%25;transform:translateX(-50%25);z-index:100;background:rgba(20,20,40,0.92);border:1px solid rgba(233,69,96,0.4);border-radius:14px;padding:8px 18px;box-shadow:0 8px 32px rgba(0,0,0,0.6);font-family:Inter,sans-serif;">
     <span style="color:var(--accent);font-weight:800;font-size:15px;margin-right:12px;">🎵</span>
     <button id="bg-play-btn" style="background:var(--accent);color:#fff;border:none;border-radius:50%25;width:34px;height:34px;cursor:pointer;font-size:18px;line-height:34px;text-align:center;margin-right:10px;">▶</button>
     <span id="bg-time" style="color:#fff;font-size:14px;font-family:monospace;">0:00 / 5:39</span>
@@ -520,7 +520,7 @@
         <div class="example-grid">
           <div class="example-card fragment"><h3>✍️ ChatGPT prompt</h3><p><strong>Prompt:</strong> “Schrijf een vriendelijke uitnodiging voor een buurtbarbecue. Maximaal 5 zinnen.”</p><div class="example-output"><strong>AI-output:</strong> “Beste buren, zaterdag organiseren we een gezellige barbecue in de straat…”</div></div>
           <div class="example-card fragment"><h3>🎨 Afbeelding maken</h3><p><strong>Prompt:</strong> “Maak een futuristische, vriendelijke AI-assistent in een klaslokaal.”</p><img class="ai-image-preview" src="assets/gen_ai_showcase.png" alt="Voorbeeld van een AI-gegenereerde afbeelding"><p class="micro">Deze visual is gemaakt met AI en daarna netjes in de slide geplaatst.</p></div>
-          <div class="example-card fragment"><h3>🎵 Muziek maken</h3><p><strong>Prompt:</strong> “Maak een vrolijk synth-pop nummer over nieuwe ideeën en technologie.”</p><div class="example-output"><strong>Voorbeeld:</strong> Suno Staff Pick “My Vision” — een publiek AI-song voorbeeld.</div><div class="song-status fragment">🎵 AI-song speelt al sinds slide 1 — zie speler onderaan</div></div>
+          <div class="example-card fragment"><h3>🎵 Muziek maken</h3><p><strong>Prompt:</strong> “Maak een vrolijk synth-pop nummer over nieuwe ideeën en technologie.”</p><div class="example-output"><strong>Voorbeeld:</strong> Suno Staff Pick “My Vision” — een publiek AI-song voorbeeld.</div><div class="song-status fragment">🎵 AI-song speelt op de achtergrond</div></div>
         </div>
         <aside class="notes">Hier laat je drie vormen zien: tekst, beeld en muziek. De Suno-link is een publiek voorbeeld. Als internet of audio niet werkt op de TV, is de visuele kaart nog steeds duidelijk.</aside>
       </section>
@@ -796,7 +796,7 @@
       var btn  = document.getElementById('bg-play-btn');
       var time = document.getElementById('bg-time');
       if (!song || !wrap) return;
-      song.volume = 0.45;
+      song.volume = 0.20;
 
       function fmt(t){ if(isNaN(t)) return '0:00'; var m=Math.floor(t/60); var s=Math.floor(t%60); return m+':'+(s<10?'0':''+s); }
       function upd(){ time.textContent = fmt(song.currentTime) + ' / ' + fmt(song.duration); }
@@ -826,11 +826,10 @@
       document.addEventListener('keydown',onInt);
       document.addEventListener('touchstart',onInt);
 
-      function showIfSlide9(ev){
-        wrap.style.display = (ev && ev.indexh === 8) ? 'block' : 'none';
-      }
-      Reveal.on('slidechanged', showIfSlide9);
-      Reveal.on('ready', showIfSlide9);
+      function showPlayer(){ wrap.style.display = 'block'; }
+      showPlayer();
+      Reveal.on('slidechanged', showPlayer);
+      Reveal.on('ready', showPlayer);
     })();
   </script>
 </body>
